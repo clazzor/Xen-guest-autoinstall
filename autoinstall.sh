@@ -2,7 +2,10 @@
 
 GITHUB="https://api.github.com/repos/xenserver/xe-guest-utilities/releases/latest"
 
+CACHEPACK="/var/cache"
+ARCH=$(uname -m)
 SUDO=sudo
+
 if [ $(id -u) -eq 0 ]; then
     SUDO=
 fi
@@ -22,8 +25,6 @@ else
     echo "Unsupported package manager!"
     exit 1
 fi
-
-ARCH=$(uname -m)
 
 case $ARCH in
     amd64|x86_64)
@@ -47,14 +48,15 @@ RELEASE=${RELEASE:1:-1}
 FILENAME=${RELEASE##*/}
 
 echo "Downloading $FILENAME"
-$SUDO curl -sLO $RELEASE
+$SUDO curl -sLO --output-dir $CACHEPACK/ $RELEASE
+$SUDO chown root:root $CACHEPACK/$RELEASE
 
 echo "Installing $FILENAME"
 if [ "$MANAGER" = "rpm" ]; then
-   $SUDO rpm -qpR $FILENAME
+   $SUDO rpm -qpR $CACHEPACK/$FILENAME
 else
-   $SUDO apt install $FILENAME
+   $SUDO apt install $CACHEPACK/$FILENAME
 fi
 
 echo "Removing file $FILENAME"
-$SUDO rm $FILENAME
+$SUDO rm $CACHEPACK/$FILENAME
