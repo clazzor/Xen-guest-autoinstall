@@ -14,3 +14,6 @@ Scripts for automatic install of the latest Xen Guest Tool for xcp server
 ```
 curl -sfL https://github.com/clazzor/Xen-guest-autoinstall/releases/download/latest/autoinstall.sh | bash -
 ```
+
+#Source
+Xen Guest Tool comes from this repository: https://github.com/xenserver/xe-guest-utilities/
